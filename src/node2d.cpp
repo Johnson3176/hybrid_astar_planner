@@ -112,8 +112,9 @@ std::vector<std::shared_ptr<Node2D>> GridSearch::getAdjacentPoints(int cells_x,
   // std::cout << "the cost-so-far of this node" << point->getG() << std::endl;
   for (int x = point->getX() - 1; x <= point->getX() + 1; ++x) {
     for (int y = point->getY() - 1; y <= point->getY() + 1; ++y) {
-      if (charMap[x  + y* cells_x] < 250 &&x < cells_x && y < cells_y 
-          && x > 0 && y > 0) {
+      if (!(x < cells_x && y < cells_y && x > 0 && y > 0))
+        continue;
+      if (charMap[x  + y* cells_x] < 250) {
         std::shared_ptr<Node2D> node = std::make_shared<Node2D>(x,y);
         if((abs(x - point->getX()) + abs(y - point->getY())) == 2) {
           g = 1.4142;
