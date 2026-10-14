@@ -19,8 +19,9 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
-  geometry_msgs
+  CATKIN_DEPENDS geometry_msgs
   pluginlib
+  costmap_2d
   roscpp
   nav_core
   tf2_ros
@@ -54,13 +55,22 @@ add_library(${PROJECT_NAME}
   src/a_start.cpp
   src/visualize.cpp
   src/node3d.cpp
-  src/hybrid_astar.cpp
   src/algorithm.cpp
   src/dubins.cpp
   src/ReedsShepp.cpp
 )
-target_link_libraries(${PROJECT_NAME} ${OMPL_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${OMPL_LIBRARIES})
 
-install(FILES bgp_plugin.xml
+install(FILES hybrid_astar_planner_plugin.xml
     DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+
+install(TARGETS ${PROJECT_NAME}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(DIRECTORY include/
+  DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
 )
